@@ -1,0 +1,26 @@
+CREATE TABLE clipboard_clips (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    content TEXT NOT NULL,
+    created_at DATETIME NOT NULL,
+    is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
+    category TEXT
+);
+
+CREATE VIRTUAL TABLE clipboard_search USING fts5(
+    content,
+    tokenize = 'porter'
+);
+
+-- Triggers to keep FTS in sync
+CREATE TRIGGER clipboard_clips_insert AFTER INSERT ON clipboard_clips BEGIN
+  INSERT INTO clipboard_search(rowid, content) VALUES (new.id, new.content);
+END;
+
+CREATE TRIGGER clipboard_clips_delete AFTER DELETE ON clipboard_clips BEGIN
+  DELETE FROM clipboard_search WHERE rowid = old.id;
+END;
+
+CREATE TRIGGER clipboard_clips_update AFTER UPDATE ON clipboard_clips BEGIN
+  DELETE FROM clipboard_search WHERE rowid = old.id;
+  INSERT INTO clipboard_search(rowid, content) VALUES (new.id, new.content);
+END;
