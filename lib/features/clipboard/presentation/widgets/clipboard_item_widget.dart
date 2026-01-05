@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/extensions/date_extensions.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../domain/entities/clipboard_item.dart';
 
 class ClipboardItemWidget extends StatelessWidget {
@@ -17,27 +20,27 @@ class ClipboardItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    return AppCard(
+      onTap: onTap,
+      onLongPress: onLongPress,
       child: ListTile(
         title: Text(
           item.content,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
+          style: context.textTheme.bodyLarge,
         ),
         subtitle: Text(
-          item.createdAt.toLocal().toString().split('.')[0],
-          style: Theme.of(context).textTheme.bodySmall,
+          item.createdAt.toLocal().formattedDateTime,
+          style: context.textTheme.bodySmall,
         ),
         trailing: IconButton(
           icon: Icon(
             item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-            color: item.isPinned ? Theme.of(context).primaryColor : null,
+            color: item.isPinned ? context.colorScheme.primary : null,
           ),
           onPressed: onPinToggle,
         ),
-        onTap: onTap,
-        onLongPress: onLongPress,
       ),
     );
   }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/config/env_config.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/utils/share_intent_handler.dart';
 import '../../../../core/utils/clipboard_watcher_service.dart';
+import '../../../../core/widgets/app_error_view.dart';
+import '../../../../core/widgets/app_header.dart';
+import '../../../../core/widgets/app_loader.dart';
+import '../../../../core/widgets/app_scaffold.dart';
 import '../bloc/clipboard_bloc.dart';
 import '../bloc/clipboard_event.dart';
 import '../bloc/clipboard_state.dart';
@@ -47,9 +51,9 @@ class _ClipboardViewState extends State<ClipboardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Clipboard Manager'),
+    return AppScaffold(
+      appBar: AppHeader(
+        title: EnvConfig.appName,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
@@ -67,7 +71,7 @@ class _ClipboardViewState extends State<ClipboardView> {
       body: BlocBuilder<ClipboardBloc, ClipboardState>(
         builder: (context, state) {
           if (state is ClipboardLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoader();
           } else if (state is ClipboardLoaded) {
             if (state.items.isEmpty) {
               return const Center(child: Text('No clips found'));
@@ -113,7 +117,12 @@ class _ClipboardViewState extends State<ClipboardView> {
               },
             );
           } else if (state is ClipboardError) {
-            return Center(child: Text('Error: ${state.message}'));
+            return AppErrorView(
+              message: state.message,
+              onRetry: () {
+                context.read<ClipboardBloc>().add(LoadClipboardItems());
+              },
+            );
           }
           return const SizedBox.shrink();
         },
