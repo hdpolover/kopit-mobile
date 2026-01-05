@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/config/env_config.dart';
 import '../../../../core/extensions/context_extensions.dart';
 
 class ClipboardDrawer extends StatelessWidget {
@@ -9,23 +10,36 @@ class ClipboardDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          UserAccountsDrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
               color: context.colorScheme.primary,
             ),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: context.colorScheme.onPrimary,
-              child: Text(
-                'H',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: context.colorScheme.primary,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(
+                  Icons.content_paste_rounded,
+                  size: 48,
+                  color: context.colorScheme.onPrimary,
                 ),
-              ),
+                const SizedBox(height: 16),
+                Text(
+                  EnvConfig.appName,
+                  style: context.textTheme.headlineSmall?.copyWith(
+                    color: context.colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Smart clipboard manager',
+                  style: context.textTheme.bodySmall?.copyWith(
+                    color: context.colorScheme.onPrimary.withValues(alpha: 0.8),
+                  ),
+                ),
+              ],
             ),
-            accountName: const Text('Hendra'), // Placeholder
-            accountEmail: const Text('hendra@example.com'), // Placeholder
           ),
           Expanded(
             child: ListView(

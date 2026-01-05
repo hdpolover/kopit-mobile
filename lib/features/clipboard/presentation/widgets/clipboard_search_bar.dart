@@ -16,7 +16,7 @@ class ClipboardSearchBar extends StatelessWidget {
         onChanged: (query) {
           context.read<ClipboardBloc>().add(SearchClipboardItems(query));
         },
-        elevation: MaterialStateProperty.all(0),
+        elevation: WidgetStateProperty.all(0),
       ),
     );
   }

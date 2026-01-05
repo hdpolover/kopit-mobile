@@ -23,9 +23,10 @@ class ClipboardItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.antiAlias,
-      elevation: 0, // Flat style for cleaner look
+      elevation: 0,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         side: BorderSide(
           color: context.colorScheme.outlineVariant.withOpacity(0.5),
         ),
@@ -34,30 +35,28 @@ class ClipboardItemWidget extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Priority 1: The Content
+              // Content
               Text(
                 item.content,
-                maxLines: 8,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: context.textTheme.bodyLarge?.copyWith(
-                  height: 1.5,
-                  fontWeight: FontWeight.w400,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  height: 1.4,
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               
-              // Priority 2: Metadata & Actions
+              // Metadata & Actions
               Row(
                 children: [
-                  // Time
                   Icon(
                     Icons.access_time,
-                    size: 14,
+                    size: 12,
                     color: context.colorScheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: 4),
@@ -65,7 +64,7 @@ class ClipboardItemWidget extends StatelessWidget {
                     timeago.format(item.createdAt.toLocal()),
                     style: context.textTheme.labelSmall?.copyWith(
                       color: context.colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 11,
                     ),
                   ),
                   const Spacer(),
@@ -74,24 +73,26 @@ class ClipboardItemWidget extends StatelessWidget {
                   IconButton(
                     icon: Icon(
                       Icons.copy_all_outlined,
-                      size: 20,
+                      size: 18,
                       color: context.colorScheme.primary,
                     ),
                     onPressed: onCopy,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                     tooltip: 'Copy',
-                    visualDensity: VisualDensity.compact,
                   ),
 
                   // Pin Action
                   IconButton(
                     icon: Icon(
                       item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-                      size: 20,
+                      size: 18,
                       color: item.isPinned ? context.colorScheme.primary : context.colorScheme.onSurfaceVariant,
                     ),
                     onPressed: onPinToggle,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                     tooltip: item.isPinned ? 'Unpin' : 'Pin',
-                    visualDensity: VisualDensity.compact,
                   ),
                 ],
               ),

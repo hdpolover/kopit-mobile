@@ -48,31 +48,36 @@ class ClipboardDetailsSheet extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Clipboard Content',
-                        style: context.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        timeago.format(item.createdAt.toLocal()),
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          color: context.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    timeago.format(item.createdAt.toLocal()),
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
-                IconButton.filledTonal(
+                IconButton(
+                  onPressed: onCopy,
+                  icon: Icon(
+                    Icons.copy_all_outlined,
+                    color: context.colorScheme.primary,
+                  ),
+                  tooltip: 'Copy',
+                ),
+                IconButton(
+                  onPressed: onDelete,
+                  icon: Icon(
+                    Icons.delete_outline,
+                    color: context.colorScheme.error,
+                  ),
+                  tooltip: 'Delete',
+                ),
+                IconButton(
                   onPressed: onPinToggle,
                   icon: Icon(
                     item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-                    color: item.isPinned ? context.colorScheme.primary : null,
+                    color: item.isPinned ? context.colorScheme.primary : context.colorScheme.onSurfaceVariant,
                   ),
+                  tooltip: item.isPinned ? 'Unpin' : 'Pin',
                 ),
               ],
             ),
@@ -95,47 +100,7 @@ class ClipboardDetailsSheet extends StatelessWidget {
             ),
           ),
           
-          // Actions Bar
-          Container(
-            padding: EdgeInsets.fromLTRB(24, 16, 24, MediaQuery.of(context).padding.bottom + 16),
-            decoration: BoxDecoration(
-              color: context.colorScheme.surface,
-              border: Border(
-                top: BorderSide(
-                  color: context.colorScheme.outlineVariant.withOpacity(0.2),
-                ),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: onDelete,
-                    icon: const Icon(Icons.delete_outline),
-                    label: const Text('Delete'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: context.colorScheme.error,
-                      side: BorderSide(color: context.colorScheme.error),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: FilledButton.icon(
-                    onPressed: onCopy,
-                    icon: const Icon(Icons.copy),
-                    label: const Text('Copy'),
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_button.dart';
 import '../extensions/context_extensions.dart';
 
 class AppErrorView extends StatelessWidget {
@@ -32,10 +33,10 @@ class AppErrorView extends StatelessWidget {
             ),
             if (onRetry != null) ...[
               const SizedBox(height: 16),
-              FilledButton.icon(
+              AppButton.primary(
+                label: 'Retry',
+                icon: Icons.refresh,
                 onPressed: onRetry,
-                icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
               ),
             ],
           ],

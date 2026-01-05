@@ -54,6 +54,11 @@ class ClipboardRepositoryImpl implements ClipboardRepository {
   }
 
   @override
+  Future<void> deleteAllClipboardItems() async {
+    await _db.delete(_db.clipboardClips).go();
+  }
+
+  @override
   Future<List<ClipboardItem>> searchClipboardItems(String query) async {
     // Using LIKE as fallback for FTS match
     final results = await (_db.select(_db.clipboardSearch)

@@ -44,3 +44,21 @@ class SearchClipboardItems extends ClipboardEvent {
   @override
   List<Object> get props => [query];
 }
+
+class ClearAllClipboardItems extends ClipboardEvent {}
+
+enum SortOrder {
+  newest,
+  oldest,
+  alphabetical,
+}
+
+class SortClipboardItems extends ClipboardEvent {
+  final SortOrder order;
+
+  const SortClipboardItems(this.order);
+
+  @override
+  List<Object> get props => [order];
+}
+

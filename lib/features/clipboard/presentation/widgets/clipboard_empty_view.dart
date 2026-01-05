@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 class ClipboardEmptyView extends StatelessWidget {
   const ClipboardEmptyView({super.key});
@@ -11,13 +12,22 @@ class ClipboardEmptyView extends StatelessWidget {
         children: [
           Icon(
             Icons.content_paste_off_outlined,
-            size: 64,
-            color: Theme.of(context).colorScheme.secondary,
+            size: 48,
+            color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             'No clips found',
-            style: Theme.of(context).textTheme.titleMedium,
+            style: context.textTheme.bodyLarge?.copyWith(
+              color: context.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Your clipboard history will appear here',
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+            ),
           ),
         ],
       ),

@@ -32,6 +32,8 @@ class ClipboardBloc extends Bloc<ClipboardEvent, ClipboardState> {
     on<DeleteClipboardItem>(_onDeleteClipboardItem);
     on<TogglePinItem>(_onTogglePinItem);
     on<SearchClipboardItems>(_onSearchClipboardItems);
+    on<SortClipboardItems>(_onSortClipboardItems);
+    on<ClearAllClipboardItems>(_onClearAllClipboardItems);
     
     // Internal handlers
     on<_ClipboardUpdated>((event, emit) => emit(ClipboardLoaded(event.items)));
@@ -83,6 +85,35 @@ class ClipboardBloc extends Bloc<ClipboardEvent, ClipboardState> {
     try {
       final results = await _repository.searchClipboardItems(event.query);
       emit(ClipboardLoaded(results));
+    } catch (e) {
+      emit(ClipboardError(e.toString()));
+    }
+  }
+
+  void _onSortClipboardItems(SortClipboardItems event, Emitter<ClipboardState> emit) {
+    final currentState = state;
+    if (currentState is! ClipboardLoaded) return;
+
+    final items = List<ClipboardItem>.from(currentState.items);
+    
+    switch (event.order) {
+      case SortOrder.newest:
+        items.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        break;
+      case SortOrder.oldest:
+        items.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        break;
+      case SortOrder.alphabetical:
+        items.sort((a, b) => a.content.toLowerCase().compareTo(b.content.toLowerCase()));
+        break;
+    }
+
+    emit(ClipboardLoaded(items));
+  }
+
+  void _onClearAllClipboardItems(ClearAllClipboardItems event, Emitter<ClipboardState> emit) async {
+    try {
+      await _repository.deleteAllClipboardItems();
     } catch (e) {
       emit(ClipboardError(e.toString()));
     }

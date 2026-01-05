@@ -24,13 +24,13 @@ class ClipboardList extends StatelessWidget {
             direction: DismissDirection.endToStart,
             background: Container(
               alignment: Alignment.centerRight,
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              padding: const EdgeInsets.only(right: 24.0),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.only(right: 20.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.error,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.delete_outline, color: Colors.white),
+              child: const Icon(Icons.delete_outline, color: Colors.white, size: 20),
             ),
             onDismissed: (direction) {
               context.read<ClipboardBloc>().add(DeleteClipboardItem(item.id));
@@ -81,10 +81,15 @@ class ClipboardList extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      isDismissible: true,
+      enableDrag: true,
+      useSafeArea: true,
       builder: (bottomSheetContext) => DraggableScrollableSheet(
         initialChildSize: 0.6,
         minChildSize: 0.4,
         maxChildSize: 0.9,
+        snap: true,
+        snapSizes: const [0.6, 0.9],
         builder: (context, scrollController) => ClipboardDetailsSheet(
           item: item,
           scrollController: scrollController,
@@ -95,6 +100,15 @@ class ClipboardList extends StatelessWidget {
           onDelete: () {
             clipboardBloc.add(DeleteClipboardItem(item.id));
             Navigator.pop(bottomSheetContext);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('Item deleted'),
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            );
           },
           onPinToggle: () {
             clipboardBloc.add(TogglePinItem(item.id));
