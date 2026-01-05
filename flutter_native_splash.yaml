@@ -1,0 +1,16 @@
+flutter_native_splash:
+  color: "#673AB7"
+  # image: assets/splash.png # Uncomment when you have a logo
+  # branding: assets/branding.png # Optional branding image
+  color_dark: "#121212"
+  # image_dark: assets/splash_dark.png
+
+  android_12:
+    color: "#673AB7"
+    # icon_background_color: "#ffffff"
+    # image: assets/android12_splash.png
+    color_dark: "#121212"
+    # icon_background_color_dark: "#121212"
+    # image_dark: assets/android12_splash_dark.png
+
+  web: false

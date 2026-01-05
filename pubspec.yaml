@@ -36,6 +36,7 @@ dev_dependencies:
   drift_dev: ^2.24.2
   injectable_generator: ^2.6.2
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.7
 
 flutter:
   uses-material-design: true
