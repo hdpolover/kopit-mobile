@@ -37,6 +37,8 @@ class ShareIntentHandler {
   }
 
   void _addClip(BuildContext context, String text) {
+    if (!context.mounted) return;
+    
     context.read<ClipboardBloc>().add(AddClipboardItem(text));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Saved from Share')),
