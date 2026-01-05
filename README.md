@@ -1,16 +1,47 @@
-# Kopit
+# Kopit 📋
 
-A new Flutter project.
+**Kopit** (pun on "Copy it" and Czech for "to stack") is a powerful, privacy-focused clipboard manager for Android built with Flutter. It helps you track your clipboard history, organize snippets, and access them instantly.
 
-## Getting Started
+## 🚀 Features
 
-This project is a starting point for a Flutter application.
+*   **Clipboard History**: Automatically saves everything you copy (Text, Links, Colors).
+*   **Privacy First**: All data is stored locally on your device using a secure database.
+*   **Smart Actions**: Quick copy, share, or edit your clips.
+*   **Search & Filter**: Find what you need in seconds.
+*   **Modern UI**: Clean Material 3 design with Dark Mode support.
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠 Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+*   **Framework**: Flutter
+*   **Language**: Dart
+*   **Database**: Drift (SQLite)
+*   **State Management**: BLoC
+*   **Dependency Injection**: GetIt & Injectable
+*   **Native Integration**: Kotlin (for Clipboard & Input Method Services)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📦 Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/hdpolover/kopit-mobile.git
+    ```
+2.  Install dependencies:
+    ```bash
+    flutter pub get
+    ```
+3.  Run the code generator:
+    ```bash
+    dart run build_runner build --delete-conflicting-outputs
+    ```
+4.  Run the app:
+    ```bash
+    flutter run
+    ```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
