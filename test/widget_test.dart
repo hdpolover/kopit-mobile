@@ -6,11 +6,9 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:kopit/app/app.dart';
-import 'package:kopit/core/di/injection.dart';
 import 'package:kopit/core/utils/clipboard_watcher_service.dart';
 import 'package:kopit/core/utils/share_intent_handler.dart';
 import 'package:kopit/features/clipboard/presentation/bloc/clipboard_bloc.dart';
-import 'package:kopit/features/clipboard/presentation/bloc/clipboard_event.dart';
 import 'package:kopit/features/clipboard/presentation/bloc/clipboard_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -57,6 +55,6 @@ void main() {
     await tester.pumpWidget(const ClipboardManagerApp());
 
     // Verify that the app title is present (AppBar)
-    expect(find.text('Clipboard Manager'), findsOneWidget);
+    expect(find.text('Kopit'), findsOneWidget);
   });
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Colors.deepPurple;
-  static const Color secondary = Colors.amber;
+  // Oceanic Teal Palette
+  static const Color primary = Color(0xFF00897B); // Teal
+  static const Color secondary = Color(0xFFFF6F00); // Amber
   static const Color error = Colors.redAccent;
   
   // Neutral Colors

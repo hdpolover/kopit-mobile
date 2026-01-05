@@ -5,13 +5,14 @@ import '../../../../core/di/injection.dart';
 import '../../../../core/utils/share_intent_handler.dart';
 import '../../../../core/utils/clipboard_watcher_service.dart';
 import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_header.dart';
 import '../../../../core/widgets/app_loader.dart';
-import '../../../../core/widgets/app_scaffold.dart';
 import '../bloc/clipboard_bloc.dart';
 import '../bloc/clipboard_event.dart';
 import '../bloc/clipboard_state.dart';
-import '../widgets/clipboard_item_widget.dart';
+import '../widgets/clipboard_drawer.dart';
+import '../widgets/clipboard_empty_view.dart';
+import '../widgets/clipboard_list.dart';
+import '../widgets/clipboard_search_bar.dart';
 
 class ClipboardPage extends StatelessWidget {
   const ClipboardPage({super.key});
@@ -51,88 +52,61 @@ class _ClipboardViewState extends State<ClipboardView> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      appBar: AppHeader(
-        title: EnvConfig.appName,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchBar(
-              hintText: 'Search clips...',
-              onChanged: (query) {
-                context.read<ClipboardBloc>().add(SearchClipboardItems(query));
-              },
-              leading: const Icon(Icons.search),
-            ),
-          ),
-        ),
-      ),
+    return Scaffold(
+      drawer: const ClipboardDrawer(),
       body: BlocBuilder<ClipboardBloc, ClipboardState>(
         builder: (context, state) {
-          if (state is ClipboardLoading) {
-            return const AppLoader();
-          } else if (state is ClipboardLoaded) {
-            if (state.items.isEmpty) {
-              return const Center(child: Text('No clips found'));
-            }
-            return ListView.builder(
-              itemCount: state.items.length,
-              itemBuilder: (context, index) {
-                final item = state.items[index];
-                return ClipboardItemWidget(
-                  item: item,
-                  onTap: () {
-                    getIt<ClipboardWatcherService>().copyToClipboard(item.content);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Copied to clipboard')),
-                    );
-                  },
-                  onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (dialogContext) => AlertDialog(
-                        title: const Text('Delete Clip?'),
-                        content: const Text('This action cannot be undone.'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(dialogContext),
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              context.read<ClipboardBloc>().add(DeleteClipboardItem(item.id));
-                              Navigator.pop(dialogContext);
-                            },
-                            child: const Text('Delete'),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  onPinToggle: () {
-                    context.read<ClipboardBloc>().add(TogglePinItem(item.id));
-                  },
-                );
-              },
-            );
-          } else if (state is ClipboardError) {
-            return AppErrorView(
-              message: state.message,
-              onRetry: () {
-                context.read<ClipboardBloc>().add(LoadClipboardItems());
-              },
-            );
-          }
-          return const SizedBox.shrink();
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<ClipboardBloc>().add(LoadClipboardItems());
+            },
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverAppBar.large(
+                  title: Text(
+                    EnvConfig.appName,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  centerTitle: false,
+                ),
+              const SliverToBoxAdapter(
+                child: ClipboardSearchBar(),
+              ),
+              if (state is ClipboardLoading)
+                const SliverFillRemaining(
+                  child: Center(child: AppLoader()),
+                )
+              else if (state is ClipboardLoaded)
+                if (state.items.isEmpty)
+                  const SliverFillRemaining(
+                    child: ClipboardEmptyView(),
+                  )
+                else
+                  ClipboardList(items: state.items)
+              else if (state is ClipboardError)
+                SliverFillRemaining(
+                  child: Center(
+                    child: AppErrorView(
+                      message: state.message,
+                      onRetry: () {
+                        context.read<ClipboardBloc>().add(LoadClipboardItems());
+                      },
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Debug: Add dummy item
           context.read<ClipboardBloc>().add(AddClipboardItem('Test Clip ${DateTime.now()}'));
         },
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add),
+        label: const Text('Add Note'),
       ),
     );
   }
